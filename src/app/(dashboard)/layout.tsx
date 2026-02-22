@@ -1,8 +1,16 @@
 "use client";
 
+import dynamic from "next/dynamic";
 import { useState } from "react";
 import { Sidebar } from "@/components/layout/sidebar";
-import { Topbar } from "@/components/layout/topbar";
+
+const Topbar = dynamic(
+  () => import("@/components/layout/topbar").then((mod) => mod.Topbar),
+  {
+    ssr: false,
+    loading: () => <div className="h-16 border-b bg-card" />,
+  }
+);
 
 export default function DashboardLayout({
   children,
