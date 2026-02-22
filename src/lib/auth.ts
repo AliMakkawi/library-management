@@ -1,5 +1,6 @@
 import NextAuth from "next-auth";
 import Credentials from "next-auth/providers/credentials";
+import Google from "next-auth/providers/google";
 import { PrismaAdapter } from "@auth/prisma-adapter";
 import { prisma } from "@/lib/prisma";
 import bcrypt from "bcryptjs";
@@ -8,7 +9,20 @@ import { authConfig } from "@/lib/auth.config";
 export const { handlers, signIn, signOut, auth } = NextAuth({
   ...authConfig,
   adapter: PrismaAdapter(prisma),
+  events: {
+    async signIn({ user, account, profile }) {
+      if (account?.provider === "google" && profile?.picture && user.id) {
+        await prisma.user.update({
+          where: { id: user.id },
+          data: { image: profile.picture as string },
+        });
+      }
+    },
+  },
   providers: [
+    Google({
+      allowDangerousEmailAccountLinking: true,
+    }),
     Credentials({
       name: "credentials",
       credentials: {
