@@ -52,9 +52,8 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ summary });
   } catch (error) {
     console.error("AI summary error:", error);
-    const message = error instanceof Error ? error.message : "Failed to generate summary";
     return NextResponse.json(
-      { error: message },
+      { error: "Something went wrong while generating the summary. Please try again later." },
       { status: 500 }
     );
   }
