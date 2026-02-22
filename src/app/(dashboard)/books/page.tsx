@@ -5,7 +5,7 @@ import Link from "next/link";
 import { getBooks } from "@/lib/actions/books";
 import { auth } from "@/lib/auth";
 import { BookCard } from "@/components/books/book-card";
-import { SearchBar } from "@/components/books/search-bar";
+import { BookSearchContainer } from "@/components/books/book-search-container";
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Plus, Library } from "lucide-react";
@@ -86,11 +86,11 @@ export default async function BooksPage({
       </div>
 
       <Suspense>
-        <SearchBar />
-      </Suspense>
-
-      <Suspense fallback={<BookGridSkeleton />}>
-        <BookGrid search={params.q} />
+        <BookSearchContainer>
+          <Suspense fallback={<BookGridSkeleton />}>
+            <BookGrid search={params.q} />
+          </Suspense>
+        </BookSearchContainer>
       </Suspense>
     </div>
   );
