@@ -1,6 +1,6 @@
 # LibraryHub - Library Management System
 
-A modern, full-stack library management system built with Next.js 16, featuring role-based access control, book catalog management, borrowing workflows, and AI-powered book summaries.
+A modern, full-stack library management system built with Next.js 16, featuring role-based access control, book catalog management, borrowing workflows, AI-powered book summaries, and natural language book search.
 
 ## Tech Stack
 
@@ -8,21 +8,24 @@ A modern, full-stack library management system built with Next.js 16, featuring 
 |-------|-----------|
 | Framework | Next.js 16 (App Router, TypeScript) |
 | UI | Tailwind CSS + shadcn/ui + Lucide Icons |
-| Auth | Auth.js v5 (Credentials) |
+| Auth | Auth.js v5 (Credentials + Google OAuth) |
 | ORM | Prisma 7 |
+| Validation | React Hook Form + Zod |
 | Database | PostgreSQL (Neon) |
 | AI | Google Gemini API |
 | Notifications | Sonner |
 
 ## Features
 
-- **Authentication** - Email/password login and registration with JWT sessions
+- **Authentication** - Email/password and Google OAuth login with JWT sessions
 - **Role-Based Access** - Three roles: Admin, Librarian, Member with server-enforced permissions
+- **Dashboard** - Role-aware statistics (total books, members, checked-out, overdue) and recent borrowing activity
 - **Book Catalog** - CRUD operations, cover images, debounced search by title/author/genre/ISBN
-- **Borrowing System** - Checkout/return with automatic availability tracking and 14-day due dates
-- **Member Management** - Admin-only invite system with token-based registration and role assignment
+- **AI Semantic Search** - Natural language book discovery powered by Gemini
 - **AI Summaries** - Gemini-powered book summaries cached in the database
-- **Dark Mode** - System-aware theme toggle
+- **Borrowing System** - Checkout/return with automatic availability tracking, 14-day due dates, and overdue detection
+- **Member Management** - Admin-only invite system with token-based registration and role assignment
+- **Dark Mode** - System-aware theme toggle via next-themes
 - **Responsive** - Mobile-friendly with collapsible sidebar
 
 ## Roles
@@ -30,6 +33,7 @@ A modern, full-stack library management system built with Next.js 16, featuring 
 | Capability | Admin | Librarian | Member |
 |---|---|---|---|
 | Browse & search books | Yes | Yes | Yes |
+| AI-powered book search | Yes | Yes | Yes |
 | Check out / return own books | Yes | Yes | Yes |
 | Return any user's books | Yes | Yes | No |
 | Create / edit / delete books | Yes | Yes | No |
@@ -95,10 +99,24 @@ If you register without seed data, the first user automatically becomes Admin.
 
 | Variable | Description | Required |
 |----------|-------------|----------|
-| `DATABASE_URL` | PostgreSQL connection string | Yes |
+| `DATABASE_URL` | PostgreSQL connection string (pooled) | Yes |
+| `DIRECT_URL` | Direct PostgreSQL connection (for migrations) | Yes |
 | `NEXTAUTH_SECRET` | Random secret for JWT signing | Yes |
 | `NEXTAUTH_URL` | App URL (http://localhost:3000 for dev) | Yes |
 | `GEMINI_API_KEY` | Google Gemini API key | No |
+| `AUTH_GOOGLE_ID` | Google OAuth client ID | No |
+| `AUTH_GOOGLE_SECRET` | Google OAuth client secret | No |
+
+## Scripts
+
+| Command | Description |
+|---------|-------------|
+| `npm run dev` | Start the development server |
+| `npm run build` | Build for production |
+| `npm run start` | Start the production server |
+| `npm run lint` | Run ESLint |
+| `npm run db:push` | Push Prisma schema to the database |
+| `npm run db:seed` | Seed the database with sample data |
 
 ## Deployment (Vercel)
 
